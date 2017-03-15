@@ -1,0 +1,47 @@
+<h1>List of Products</h1>
+
+<!-- <ul>
+    <li ng-repeat="beer in beers">
+        <a href="#/beers/{{beer.id}}">{{beer.name}}</a> by {{beer.producer}}
+    </li>
+</ul> -->
+
+<div class="alert alert-success" ng-show="created">
+    New Product "{{created}}" added to the list!
+</div>
+
+<div class="alert alert-warning" ng-show="deleted">
+    Product removed
+</div>
+
+<table class="table table-striped table-condensed">
+    <thead>
+    <tr>
+      <th style="min-width: 10px;">ID</th>
+      <th style="min-width: 80px;">Name</th>
+      <th style="min-width: 80px;">Brand</th>
+      <th style="min-width: 80px;">Category</th>
+      <th style="min-width: 80px;">oldprice</th>
+      <th style="min-width: 150px;">price</th>
+      <th style="min-width: 150px;">createdTime</th>
+      <th style="min-width: 150px;">lastUpdatedTime</th>
+        <!-- <th style="width:20px;"> </th> -->
+        <th style="width:20px;"> </th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr ng-repeat="product in products">
+        <td><a href="#/products/{{result.id}}">{{ product.id }}</a></td>
+        <td><a href="#/products/{{result.id}}">{{ product.name }}</a></td>
+        <td>{{ product.brand }}</td>
+        <td>{{ product.category }}</td>
+        <td>{{ product.oldprice | isoCurrency:product.currency }}</td>
+        <td>{{ product.price | isoCurrency:product.currency }}<span ng-if="product.oldprice > 0" class="text-danger">(OFF {{ 100 * (product.oldprice - product.price) / product.oldprice | number:0  }} %)</span></td>
+        <td>{{ product.createdTime * 1000 | date:'yyyy-MM-dd HH:mm:ss' }}</td>
+        <td>{{ product.lastUpdatedTime * 1000 | date:'yyyy-MM-dd HH:mm:ss' }}</td>
+        <!-- <td><a ng-click="editBeer(beer.id)" class="btn btn-small btn-primary">Edit</a></td> -->
+        <td><a ng-click="editProduct(product.id)" class="btn btn-small btn-info">Edit</a></td>
+    </tr>
+    </tbody>
+</table>
+<a href="#/newProduct" class="btn btn-small btn-primary">Insert New Product</a>

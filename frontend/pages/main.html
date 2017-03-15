@@ -1,0 +1,40 @@
+<h1>Pilibaba Spider Home</h1>
+
+<div style="margin-top: 60px;">
+    <span class="col-md-6 col-md-offset-3">
+    <input type="text" class="form-control" ng-model="searchString" placeholder='Search: e.g. "Kitchen Craft" or "www.mimocook.com"' ng-change="search()"/>
+    </span>
+</div>
+
+<div class="clearfix"></div>
+
+<table id="list_of_products" class="table table-striped table-condensed" style="margin-top: 60px;">
+    <thead>
+    <tr>
+        <th style="min-width: 10px;">ID</th>
+        <th style="min-width: 80px;">Name</th>
+        <th style="min-width: 80px;">Brand</th>
+        <th style="min-width: 80px;">Category</th>
+        <th style="min-width: 80px;">oldprice</th>
+        <th style="min-width: 80px;">price</th>
+        <th style="min-width: 120px;">createdTime</th>
+        <th style="min-width: 120px;">lastUpdatedTime</th>
+
+    </tr>
+    </thead>
+    <tbody>
+    <tr ng-repeat="result in results">
+        <td><a href="#/products/{{result.id}}">{{ result.id }}</a></td>
+        <td><a href="#/products/{{result.id}}">{{ result.name }}</a></td>
+        <td>{{ result.brand }}</td>
+        <td>{{ result.category }}</td>
+        <td>{{ result.oldprice | currency:result.currency }}</td>
+        <td>{{ result.price | currency:result.currency }}</td>
+        <td>{{ result.createdTime * 1000 | date:'yyyy-MM-dd HH:mm:ss' }}</td>
+        <td>{{ result.lastUpdatedTime * 1000 | date:'yyyy-MM-dd HH:mm:ss' }}</td>
+    </tr>
+    </tbody>
+</table>
+
+<a href="#/newBeer" class="btn btn-small btn-primary">Insert New Product</a>
+<a href="#/products" class="btn btn-small btn-primary">Full List</a>
