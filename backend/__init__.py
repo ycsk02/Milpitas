@@ -15,23 +15,27 @@ class ProductList(Resource):
 
     def get(self):
         print("Call for: GET /products")
+        parser.add_argument('p')
+        query_string = parser.parse_args()
         url = config.es_base_url['products']+'/_search'
         query = {
             "query": {
                 "match_all": {}
             },
             "sort": [
-                {"id": {"order": "asc"}}
+                {"id": {"order": "desc"}}
             ],
-            "size": 200
+            "from":(int(query_string['p']) - 1) * 200,"size": 200
         }
         resp = requests.post(url, data=json.dumps(query))
         data = resp.json()
-        products = []
+        products = {}
+        products['totalcount'] = data['hits']['total']
+        products['data'] = []
         for hit in data['hits']['hits']:
             product = hit['_source']
             product['id'] = hit['_id']
-            products.append(product)
+            products['data'].append(product)
         return products
 
     def post(self):
@@ -97,29 +101,40 @@ class Search(Resource):
     def get(self):
         print("Call for GET /search")
         parser.add_argument('q')
+        parser.add_argument('p')
         query_string = parser.parse_args()
         url = config.es_base_url['products']+'/_search'
+            # "query": {
+            #     "multi_match": {
+            #         "fields": ["name", "brand", "category", "domain"],
+            #         "query": query_string['q'],
+            #         "type": "cross_fields",
+            #         "use_dis_max": "False"
+            #     }
+            # },
+            # "sort": [
+            #     {"id": {"order": "asc"}}
+            # ],
         query = {
             "query": {
-                "multi_match": {
-                    "fields": ["name", "brand", "category", "info", "domain"],
-                    "query": query_string['q'],
-                    "type": "cross_fields",
-                    "use_dis_max": "False"
+                "simple_query_string": {
+                   "fields": ["name", "brand", "category", "domain"],
+                   "default_operator": "and",
+                   "query": query_string['q']
                 }
-            },
-            "sort": [
-                {"id": {"order": "asc"}}
-            ],
-            "size": 200
+             },
+            "from":(int(query_string['p']) - 1) * 200,"size": 200
         }
         resp = requests.post(url, data=json.dumps(query))
         data = resp.json()
-        products = []
+        totalcount = data['hits']['total']
+        products = {}
+        products['totalcount'] = totalcount
+        products['data'] = []
         for hit in data['hits']['hits']:
             product = hit['_source']
             product['id'] = hit['_id']
-            products.append(product)
+            products['data'].append(product)
         return products
 
 api.add_resource(Product, config.api_base_url+'/products/<product_id>')

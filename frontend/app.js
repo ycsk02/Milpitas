@@ -1,4 +1,4 @@
-var myApp = angular.module("myApp", ["ngRoute", "ngResource", "isoCurrency", "myApp.services"]);
+var myApp = angular.module("myApp", ["ngRoute", "ngResource", "isoCurrency", "angularUtils.directives.dirPagination", "myApp.services"]);
 
 var services = angular.module("myApp.services", ["ngResource"])
 services
@@ -9,8 +9,8 @@ services
     });
 })
 .factory('Products', function($resource) {
-    return $resource('http://192.168.1.198:5000/api/v1/products', {}, {
-        query: { method: 'GET', isArray: true },
+    return $resource('http://192.168.1.198:5000/api/v1/products', {p: '@p'}, {
+        query: { method: 'GET', isArray: false },
         create: { method: 'POST', }
     });
 })
@@ -25,8 +25,8 @@ services
     });
 })
 .factory('Search', function($resource) {
-    return $resource('http://192.168.1.198:5000/api/v1/search', {q: '@q'}, {
-        query: { method: 'GET', isArray: true}
+    return $resource('http://192.168.1.198:5000/api/v1/search', {q: '@q',p: '@p'}, {
+        query: { method: 'GET', isArray: false}
     });
 });
 
@@ -65,11 +65,20 @@ myApp.filter('filterStyles', function() {
 myApp.controller(
     'mainController',
     function ($scope, Search) {
-        $scope.search = function() {
+        $scope.search = function(pageNumber) {
             q = $scope.searchString;
             if (q.length > 1) {
-                $scope.results = Search.query({q: q});
+                $scope.results = Search.query({q: q,p:pageNumber});
             }
+        };
+        $scope.setOrderProperty = function(keyname) {
+                if ($scope.orderProperty === keyname) {
+                    $scope.orderProperty = '-' + keyname;
+                } else if ($scope.orderProperty === '-' + keyname) {
+                    $scope.orderProperty = keyname;
+                } else {
+                    $scope.orderProperty = keyname;
+                }
         };
     }
 );
@@ -108,7 +117,23 @@ myApp.controller(
             }, 500);
             //$scope.beers = Beers.query();
         };
-        $scope.products = Products.query();
+        $scope.setOrderProperty = function(keyname) {
+                if ($scope.orderProperty === keyname) {
+                    $scope.orderProperty = '-' + keyname;
+                } else if ($scope.orderProperty === '-' + keyname) {
+                    $scope.orderProperty = keyname;
+                } else {
+                    $scope.orderProperty = keyname;
+                }
+        };
+        $scope.queryProducts = function(pageNumber) {
+            if (pageNumber > 0) {
+                $scope.products = Products.query({p:pageNumber});
+            } else {
+                $scope.products = Products.query({p:1});
+            }
+        };
+        $scope.products = Products.query({p:1});
     }
 );
 
