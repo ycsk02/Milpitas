@@ -7,7 +7,7 @@
 </div>
 
 <div class="clearfix"></div>
-<dir-pagination-controls class="pull-right" pagination-id="results_main" on-page-change="search(newPageNumber)"  direction-links="true" boundary-links="true" ></dir-pagination-controls>
+<dir-pagination-controls ng-if="results.data" class="pull-right" pagination-id="results_main" on-page-change="search(newPageNumber)"  direction-links="true" boundary-links="true" ></dir-pagination-controls>
 <table id="list_of_products" class="table table-striped table-hover" style="margin-top: 60px;">
     <thead>
     <tr>
