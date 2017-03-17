@@ -1,14 +1,13 @@
 <h1>Pilibaba Spider Home</h1>
 
 <div style="margin-top: 60px;">
-    <span>
+    <span class="col-md-6 col-md-offset-3">
     <input type="text" class="form-control" ng-model="searchString" placeholder='Search: e.g. "Kitchen Craft" or "www.mimocook.com"' ng-change="search(1)"/>
     </span>
-    <dir-pagination-controls class="pull-right" on-page-change="search(newPageNumber)"  direction-links="true" boundary-links="true" ></dir-pagination-controls>
 </div>
 
 <div class="clearfix"></div>
-
+<dir-pagination-controls class="pull-right" pagination-id="results_main" on-page-change="search(newPageNumber)"  direction-links="true" boundary-links="true" ></dir-pagination-controls>
 <table id="list_of_products" class="table table-striped table-hover" style="margin-top: 60px;">
     <thead>
     <tr>
@@ -36,7 +35,7 @@
     </tr>
     </thead>
     <tbody>
-    <tr dir-paginate="result in results.data|orderBy:orderProperty|itemsPerPage:200" total-items="results.totalcount">
+    <tr dir-paginate="result in results.data|orderBy:orderProperty|itemsPerPage:200" pagination-id="results_main" total-items="results.totalcount">
         <td><a href="#/products/{{result.id}}">{{ result.id }}</a></td>
         <td><a href="{{result.url}}" target="_blank">{{ result.name }}</a></td>
         <td>{{ result.brand }}</td>
@@ -49,7 +48,7 @@
     </tr>
     </tbody>
 </table>
-<dir-pagination-controls class="pull-right" on-page-change="queryProducts(newPageNumber)"  direction-links="true" boundary-links="true" ></dir-pagination-controls>
+
 
 <a href="#/newBeer" class="btn btn-small btn-primary">Insert New Product</a>
 <a href="#/products" class="btn btn-small btn-primary">Full List</a>

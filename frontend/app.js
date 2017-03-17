@@ -65,6 +65,7 @@ myApp.filter('filterStyles', function() {
 myApp.controller(
     'mainController',
     function ($scope, Search) {
+        $scope.pageNumber = 1;
         $scope.search = function(pageNumber) {
             q = $scope.searchString;
             if (q.length > 1) {
